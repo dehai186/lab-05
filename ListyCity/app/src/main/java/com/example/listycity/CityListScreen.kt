@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
@@ -22,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +34,7 @@ fun CityListScreen(
     cities: List<City>,
     onAddCity: (City) -> Unit,
     onUpdateCity: (City, City) -> Unit,
+    onDelCity:(City) ->Unit,
     modifier: Modifier = Modifier
 ) {
     var newCityName by remember { mutableStateOf("") }
@@ -103,7 +106,8 @@ fun CityListScreen(
                     Text("ADD CITY")
                 }
             }
-        }
+        }//if show add city
+
         if (selectedCity != null) {
             Row(
                 modifier = Modifier
@@ -152,10 +156,13 @@ fun CityListScreen(
                     }
                 ) {
                     Text("UPDATE CITY")
-                }
+                }//button
             }
-        }
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        }// if city selected
+
+        LazyColumn(modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)) {
             itemsIndexed(cities) { index, city ->
                 CityRow(
                     city = city,
@@ -172,7 +179,33 @@ fun CityListScreen(
                     HorizontalDivider()
                 }
             }
+        }// cities
+
+
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Button(
+                modifier = Modifier.padding( 12.dp),
+                onClick = {
+                    val cityToDel = selectedCity
+                    if (
+                        cityToDel != null
+                    ) {
+                        onDelCity(cityToDel)
+                        selectedCity = null
+
+                    }
+                }
+
+            ) {
+                Text("Delete")
+            }//button
         }
+
     }
 }
 
@@ -201,7 +234,7 @@ fun CityRow(
         )
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun CityListScreenPreview() {
@@ -217,3 +250,5 @@ fun CityListScreenPreview() {
         )
     }
 }
+
+*/
